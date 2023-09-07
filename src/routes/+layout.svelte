@@ -1,6 +1,6 @@
-<svelte:head>
-	<link rel="stylesheet" href="$app/assets/global.css" />
-</svelte:head>
+<!-- <svelte:head>
+	<link rel="stylesheet" href="$app/global.css" />
+</svelte:head> -->
 
 <nav>
 	<h1>sethtadd's portfolio!</h1>
