@@ -7,7 +7,7 @@
 		<h1>Chatbot</h1>
         <hr />
 		<div class="content-card">
-			<!-- <SethGpt /> -->
+			<SethGpt />
 		</div>
 	</div>
 	<div class="column">
