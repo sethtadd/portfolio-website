@@ -1,5 +1,5 @@
 <svelte:head>
-	<link rel="stylesheet" href="/global.css" />
+	<link rel="stylesheet" href="$app/assets/global.css" />
 </svelte:head>
 
 <nav>
