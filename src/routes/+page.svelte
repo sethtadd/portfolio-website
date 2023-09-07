@@ -1,12 +1,13 @@
 <script>
+	import SethGpt from '$lib/SethGPT.svelte';
 </script>
 
 <div class="grid-container">
 	<div class="column">
 		<h1>Chatbot</h1>
+        <hr />
 		<div class="content-card">
-			<h2>SethGPT</h2>
-			<p>Placeholder for SethGPT chatbot component.</p>
+			<!-- <SethGpt /> -->
 		</div>
 	</div>
 	<div class="column">
@@ -34,6 +35,9 @@
 </div>
 
 <style>
+	h1 {
+		color: orange;
+	}
 	/* Grid container styling */
 	.grid-container {
 		display: grid;
@@ -44,33 +48,31 @@
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 		border-radius: 5px;
 		max-width: 60vw; /* or any other constraint */
+		margin: 0 auto;
 	}
 
 	.column {
 		position: relative;
 		padding: 0 1rem;
-	}
-
-	.column:not(:last-child)::after {
-		content: '';
-		position: absolute;
-		top: 10%;
-		bottom: 10%;
-		right: 0;
-		width: 2px;
-		background-color: orange;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+		border-radius: 5px;
 	}
 
 	.content-card {
 		padding: 1rem;
 		background-color: #555;
 		margin-bottom: 1rem;
-		border-radius: 5px;
-		text-align: center;
-	}
 
-	/* Just to remove margin from the last demo box */
-	.content-card:last-child {
-		margin-bottom: 0;
+		border-radius: 5px;
+
+		border-width: 2px;
+		border-style: solid;
+		border-color: transparent;
+		transition: box-shadow 0.1s ease-in-out;
+		transition: border-color 0.05s ease-in-out;
+	}
+	.content-card:hover {
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+		border-color: orange;
 	}
 </style>
