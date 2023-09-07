@@ -1,14 +1,10 @@
-<!-- <svelte:head>
-	<link rel="stylesheet" href="$app/global.css" />
-</svelte:head> -->
-
 <nav>
 	<h1>sethtadd's portfolio!</h1>
 </nav>
 
-<!-- <main> -->
+<main>
 	<slot />
-<!-- </main> -->
+</main>
 
 <style>
 	main {
@@ -16,7 +12,6 @@
 		justify-content: center;
 	}
 
-	/* make all h1 elements within main orange */
 	nav {
 		background-color: #333;
 		padding: 2rem;
@@ -24,13 +19,13 @@
 		border-radius: 5px;
 		max-width: 60vw;
 		margin: 2rem auto;
-		z-index: 1000; /* stay above other elements */
+		z-index: 1000;
 	}
 
 	nav h1 {
-		margin: 0; /* remove default margin */
+		margin: 0;
 		text-align: center;
-		font-size: 1.5rem; /* adjust size as needed */
+		font-size: 1.5rem;
 
 		color: orange;
 	}

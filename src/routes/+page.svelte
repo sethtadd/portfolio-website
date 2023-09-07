@@ -5,7 +5,6 @@
 <div class="grid-container">
 	<div class="column">
 		<h1>Chatbot</h1>
-        <hr />
 		<div class="content-card">
 			<SethGpt />
 		</div>
@@ -38,7 +37,6 @@
 	h1 {
 		color: orange;
 	}
-	/* Grid container styling */
 	.grid-container {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
@@ -47,7 +45,7 @@
 		padding: 2rem;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 		border-radius: 5px;
-		max-width: 60vw; /* or any other constraint */
+		max-width: 60vw;
 		margin: 0 auto;
 	}
 
