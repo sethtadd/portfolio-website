@@ -1,5 +1,9 @@
 <script>
+	import ExpandableCard from '$lib/ExpandableCard.svelte';
 	import SethGpt from '$lib/SethGPT.svelte';
+	import { projects as importedProjects } from '$lib/projects';
+
+	let projects = importedProjects || [];
 </script>
 
 <div class="grid-container">
@@ -11,14 +15,18 @@
 	</div>
 	<div class="column">
 		<h1>Projects</h1>
-		<div class="content-card">
-			<h2>Project 1</h2>
-			<p>Some info about project 1</p>
-		</div>
-		<div class="content-card">
-			<h2>Project 2</h2>
-			<p>Some info about project 2</p>
-		</div>
+		{#if projects && projects.length}
+			{#each projects as card (card.title)}
+				<ExpandableCard
+					bind:expanded={card.isExpanded}
+					title={card.title}
+					summary={card.summary}
+					content={card.content}
+				/>
+			{/each}
+		{:else}
+			<p>No projects available.</p>
+		{/if}
 	</div>
 	<div class="column">
 		<h1>Skills & Experience</h1>
