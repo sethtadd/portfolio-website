@@ -1,15 +1,17 @@
-<script>
+<script lang="ts">
 	import ExpandableCard from '$lib/ExpandableCard.svelte';
 	import SethGpt from '$lib/SethGPT.svelte';
-	import { projects as importedProjects } from '$lib/projects';
+	import { projects as importedProjects } from '$lib/projectData';
+	import { skillsAndExperiences as importedSkillsAndExperiences } from '$lib/skillsAndExperienceData';
 
 	let projects = importedProjects || [];
+	let skillsAndExperiences = importedSkillsAndExperiences || [];
 </script>
 
 <div class="grid-container">
 	<div class="column">
 		<h1>Chatbot</h1>
-		<div class="content-card">
+		<div class="chatbot-card">
 			<SethGpt />
 		</div>
 	</div>
@@ -30,14 +32,18 @@
 	</div>
 	<div class="column">
 		<h1>Skills & Experience</h1>
-		<div class="content-card">
-			<h2>Skills</h2>
-			<p>Sleeping</p>
-		</div>
-		<div class="content-card">
-			<h2>Experience</h2>
-			<p>Eating</p>
-		</div>
+		{#if skillsAndExperiences && skillsAndExperiences.length}
+			{#each skillsAndExperiences as card (card.title)}
+				<ExpandableCard
+					bind:expanded={card.isExpanded}
+					title={card.title}
+					summary={card.summary}
+					content={card.content}
+				/>
+			{/each}
+		{:else}
+			<p>No projects available.</p>
+		{/if}
 	</div>
 </div>
 
@@ -64,7 +70,7 @@
 		border-radius: 5px;
 	}
 
-	.content-card {
+	.chatbot-card {
 		padding: 1rem;
 		background-color: #555;
 		margin-bottom: 1rem;
@@ -77,8 +83,7 @@
 		transition: box-shadow 0.1s ease-in-out;
 		transition: border-color 0.05s ease-in-out;
 	}
-	.content-card:hover {
+	.chatbot-card:hover {
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-		border-color: orange;
 	}
 </style>

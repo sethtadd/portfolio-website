@@ -1,5 +1,5 @@
 <nav>
-	<h1>sethtadd's portfolio!</h1>
+	<h1>SETHTADD</h1>
 </nav>
 
 <main>
@@ -25,8 +25,6 @@
 	nav h1 {
 		margin: 0;
 		text-align: center;
-		font-size: 1.5rem;
-
 		color: orange;
 	}
 </style>

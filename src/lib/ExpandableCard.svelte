@@ -40,7 +40,7 @@
 		transition: box-shadow 0.1s ease-in-out;
 		transition: border-color 0.1s ease-in-out;
 
-		text-align: center;
+		/* text-align: center; */
 	}
 	.card:hover {
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
