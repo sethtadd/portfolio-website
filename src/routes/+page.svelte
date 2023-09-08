@@ -1,8 +1,7 @@
 <script lang="ts">
 	import ExpandableCard from '$lib/ExpandableCard.svelte';
 	import SethGpt from '$lib/SethGPT.svelte';
-	import { projectStore } from '$lib/projectStore';
-	import { skillsAndExperienceStore } from '$lib/skillsAndExperienceStore';
+	import { projectStore, skillsAndExperienceStore } from '$lib/stores';
 </script>
 
 <div class="grid-container">

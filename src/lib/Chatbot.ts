@@ -1,3 +1,5 @@
+import { projectStore, skillsAndExperienceStore } from "$lib/stores";
+import { get } from "svelte/store";
 
 export class Chatbot {
     public awaitingAssistantResponse: boolean = false;
@@ -43,18 +45,86 @@ export class Chatbot {
                 "required": ["message"],
             },
         },
+        {
+            "name": "randomize_cards_order",
+            "description": "Randomizes the order of the cards on the page.",
+            "parameters": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+            },
+        },
+        {
+            "name": "expand_cards",
+            "description": "Expands all the cards on the page.",
+            "parameters": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+            },
+        },
+        {
+            "name": "collapse_cards",
+            "description": "Collapses all the cards on the page.",
+            "parameters": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+            },
+        },
     ]
 
-    private functions: { [key: string]: (...args: any[]) => any } = {
+    private functions: { [key: string]: (...args: any[]) => string } = {
         "alert_message": this.alert_message,
+        "randomize_cards_order": this.randomizeCardsOrder,
+        "expand_cards": this.expandCards,
+        "collapse_cards": this.collapseCards,
     };
 
 
-    private alert_message(message: string) {
+    private alert_message(message: string): string {
         alert(message);
         return `Done.`;
     }
 
+    private randomizeCardsOrder(): string {
+        const projects = get(projectStore);
+        const skillsAndExperience = get(skillsAndExperienceStore);
+        projectStore.set(projects.sort(() => Math.random() - 0.5));
+        skillsAndExperienceStore.set(skillsAndExperience.sort(() => Math.random() - 0.5));
+
+        return `Done.`;
+    }
+
+    private expandCards() {
+        const projects = get(projectStore);
+        const skillsAndExperience = get(skillsAndExperienceStore);
+        projectStore.set(projects.map((card) => {
+            card.isExpanded = true;
+            return card;
+        }));
+        skillsAndExperienceStore.set(skillsAndExperience.map((card) => {
+            card.isExpanded = true;
+            return card;
+        }));
+
+        return `Done.`;
+    }
+
+    private collapseCards() {
+        const projects = get(projectStore);
+        const skillsAndExperience = get(skillsAndExperienceStore);
+        projectStore.set(projects.map((card) => {
+            card.isExpanded = false;
+            return card;
+        }));
+        skillsAndExperienceStore.set(skillsAndExperience.map((card) => {
+            card.isExpanded = false;
+            return card;
+        }));
+
+        return `Done.`;
+    }
 
     constructor(messages?: { role: string; content: string; }[]) {
         if (messages) this.messages = messages;
