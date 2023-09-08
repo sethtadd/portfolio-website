@@ -1,11 +1,8 @@
 <script lang="ts">
 	import ExpandableCard from '$lib/ExpandableCard.svelte';
 	import SethGpt from '$lib/SethGPT.svelte';
-	import { projects as importedProjects } from '$lib/projectData';
-	import { skillsAndExperiences as importedSkillsAndExperiences } from '$lib/skillsAndExperienceData';
-
-	let projects = importedProjects || [];
-	let skillsAndExperiences = importedSkillsAndExperiences || [];
+	import { projectStore } from '$lib/projectStore';
+	import { skillsAndExperienceStore } from '$lib/skillsAndExperienceStore';
 </script>
 
 <div class="grid-container">
@@ -17,8 +14,8 @@
 	</div>
 	<div class="column">
 		<h1>Projects</h1>
-		{#if projects && projects.length}
-			{#each projects as card (card.title)}
+		{#if $projectStore.length}
+			{#each $projectStore as card (card.title)}
 				<ExpandableCard
 					bind:expanded={card.isExpanded}
 					title={card.title}
@@ -27,13 +24,13 @@
 				/>
 			{/each}
 		{:else}
-			<p>No projects available.</p>
+			<p>Oops, nothing here!</p>
 		{/if}
 	</div>
 	<div class="column">
 		<h1>Skills & Experience</h1>
-		{#if skillsAndExperiences && skillsAndExperiences.length}
-			{#each skillsAndExperiences as card (card.title)}
+		{#if $skillsAndExperienceStore.length}
+			{#each $skillsAndExperienceStore as card (card.title)}
 				<ExpandableCard
 					bind:expanded={card.isExpanded}
 					title={card.title}
@@ -42,7 +39,7 @@
 				/>
 			{/each}
 		{:else}
-			<p>No projects available.</p>
+			<p>Oops, nothing here!</p>
 		{/if}
 	</div>
 </div>
