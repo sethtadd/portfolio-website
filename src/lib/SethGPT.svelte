@@ -37,73 +37,64 @@
 	});
 </script>
 
-<div class="message-box">
-	<div class="message-list" bind:this={scrollDiv}>
-		{#each chatbot.messages as message}
-			<div class="message-wrapper {message.role}">
-				<div class="message {message.role}">
-					{#if message.name}
-						<span class="function-name">RESULT {message.name}</span><br />
-					{:else if message.function_call}
-						<span class="function-name">CALL {message.function_call.name}</span><br />
-					{/if}
-					{message.content || message.function_call?.arguments || ''}
-				</div>
+<div class="message-box" bind:this={scrollDiv}>
+	{#each chatbot.messages as message}
+		<div class="message-wrapper {message.role}">
+			<div class="message {message.role}">
+				{#if message.name}
+					<span class="function-name">RESULT {message.name}</span><br />
+				{:else if message.function_call}
+					<span class="function-name">CALL {message.function_call.name}</span><br />
+				{/if}
+				{message.content || message.function_call?.arguments || ''}
 			</div>
-		{/each}
-		{#if chatbot.awaitingAssistantResponse}
-			<div class="typing-indicator-wrapper">
-				<div class="typing-indicator">
-					<span />
-					<span />
-					<span />
-				</div>
+		</div>
+	{/each}
+	{#if chatbot.awaitingAssistantResponse}
+		<div class="typing-indicator-wrapper">
+			<div class="typing-indicator">
+				<span />
+				<span />
+				<span />
 			</div>
-		{/if}
-	</div>
-	<input
-		type="text"
-		class="user-input"
-		placeholder="Type a message..."
-		bind:value={userMessage}
-		on:keydown={(e) => {
-			if (e.key === 'Enter') sendMessage(e);
-		}}
-	/>
+		</div>
+	{/if}
 </div>
+<input
+	type="text"
+	class="user-input"
+	placeholder="Type a message..."
+	bind:value={userMessage}
+	on:keydown={(e) => {
+		if (e.key === 'Enter') sendMessage(e);
+	}}
+/>
 
 <style>
 	.message-box {
-		/* max-height: 60vh; */
-	}
-	.message-list {
 		width: 100%;
 		box-sizing: border-box;
 		max-height: 40vh;
 		overflow-y: auto;
+		border-radius: 5px;
 
-		/* For Firefox */
+		/* Scrollbar styling for Firefox */
 		scrollbar-width: thin;
 		scrollbar-color: orange transparent;
-
-		border-color: orange;
-		border-radius: 5px;
 	}
 
-	/* For Webkit browsers */
-
-	.message-list::-webkit-scrollbar {
-		width: 4px; /* Width of the scrollbar */
+	/* Scrollbar styling for Webkit browsers */
+	.message-box::-webkit-scrollbar {
+		width: 4px;
+	}
+	.message-box::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	.message-box::-webkit-scrollbar-thumb {
+		background-color: orange;
+		border-radius: 4px;
 	}
 
-	.message-list::-webkit-scrollbar-track {
-		background: transparent; /* Background color for the track */
-	}
-
-	.message-list::-webkit-scrollbar-thumb {
-		background-color: orange; /* Color of the thumb */
-		border-radius: 4px; /* Roundness of the scrollbar thumb */
-	}
 	.message {
 		display: inline-block;
 		padding: 0.5em;
@@ -146,11 +137,11 @@
 		background-color: #797979;
 		color: white;
 
-		border: 2px solid transparent; /* Set transparent border */
-		transition: border-color 0.3s ease; /* Transition on border color */
+		border: 2px solid transparent;
+		transition: border-color 0.3s ease;
 	}
 	.user-input:focus {
-		border-color: orange; /* Change border color on focus */
+		border-color: orange;
 		outline: none; /* Remove the default browser outline */
 	}
 	.user-input::placeholder {

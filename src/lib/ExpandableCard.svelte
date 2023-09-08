@@ -34,13 +34,11 @@
 
 		border-radius: 5px;
 
-		border-width: 2px;
 		border-style: solid;
+		border-width: 2px;
 		border-color: transparent;
-		transition: box-shadow 0.1s ease-in-out;
-		transition: border-color 0.1s ease-in-out;
-
-		/* text-align: center; */
+		transition: box-shadow 0.2s ease-in-out;
+		transition: background-color 0.2s ease-in-out;
 	}
 	.card:hover {
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
@@ -52,15 +50,14 @@
 
 	button.toggle {
 		background: none;
+		color: orange;
 		border: none;
-		padding: 0;
+		padding: 0.25rem 1rem;
 		margin: 0;
 		font-size: 1.5em;
-		color: orange;
 
 		cursor: pointer;
 		transition: transform 0.3s ease-in-out;
-		padding: 0.25rem 1rem;
 	}
 
 	button.toggle .content {

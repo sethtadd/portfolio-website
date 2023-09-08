@@ -23,8 +23,7 @@
 	}
 
 	nav h1 {
-		margin: 0;
-		text-align: center;
 		color: orange;
+		margin: 0;
 	}
 </style>
