@@ -2,6 +2,7 @@
 	import ExpandableCard from '$lib/ExpandableCard.svelte';
 	import SethGpt from '$lib/SethGPT.svelte';
 	import { projectStore, skillsAndExperienceStore } from '$lib/stores';
+	import { flip } from 'svelte/animate';
 </script>
 
 <div class="grid-container">
@@ -13,33 +14,43 @@
 	</div>
 	<div class="column">
 		<h1>Projects</h1>
-		{#if $projectStore.length}
-			{#each $projectStore as card (card.title)}
-				<ExpandableCard
-					bind:expanded={card.isExpanded}
-					title={card.title}
-					summary={card.summary}
-					content={card.content}
-				/>
-			{/each}
-		{:else}
-			<p>Oops, nothing here!</p>
-		{/if}
+		<!--using <ul> for animation:flip effect, no styling-->
+		<ul style="list-style-type:none;padding:0;margin:0;">
+			{#if $projectStore.length}
+				{#each $projectStore as card (card.title)}
+					<li animate:flip={{ duration: 500 }} style="padding:0;margin:0;">
+						<ExpandableCard
+							bind:expanded={card.isExpanded}
+							title={card.title}
+							summary={card.summary}
+							content={card.content}
+						/>
+					</li>
+				{/each}
+			{:else}
+				<p>Oops, nothing here!</p>
+			{/if}
+		</ul>
 	</div>
 	<div class="column">
 		<h1>Skills & Experience</h1>
-		{#if $skillsAndExperienceStore.length}
-			{#each $skillsAndExperienceStore as card (card.title)}
-				<ExpandableCard
-					bind:expanded={card.isExpanded}
-					title={card.title}
-					summary={card.summary}
-					content={card.content}
-				/>
-			{/each}
-		{:else}
-			<p>Oops, nothing here!</p>
-		{/if}
+		<!--using <ul> for animation:flip effect, no styling-->
+		<ul style="list-style-type:none;padding:0;margin:0;">
+			{#if $skillsAndExperienceStore.length}
+				{#each $skillsAndExperienceStore as card (card.title)}
+					<li animate:flip={{ duration: 500 }} style="padding:0;margin:0;">
+						<ExpandableCard
+							bind:expanded={card.isExpanded}
+							title={card.title}
+							summary={card.summary}
+							content={card.content}
+						/>
+					</li>
+				{/each}
+			{:else}
+				<p>Oops, nothing here!</p>
+			{/if}
+		</ul>
 	</div>
 </div>
 

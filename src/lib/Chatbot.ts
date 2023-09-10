@@ -1,5 +1,4 @@
 import { projectStore, skillsAndExperienceStore } from "$lib/stores";
-import { get } from "svelte/store";
 
 export class Chatbot {
     public awaitingAssistantResponse: boolean = false;
@@ -88,40 +87,22 @@ export class Chatbot {
     }
 
     private randomizeCardsOrder(): string {
-        const projects = get(projectStore);
-        const skillsAndExperience = get(skillsAndExperienceStore);
-        projectStore.set(projects.sort(() => Math.random() - 0.5));
-        skillsAndExperienceStore.set(skillsAndExperience.sort(() => Math.random() - 0.5));
+        projectStore.update(projects => [...projects].sort(() => Math.random() - 0.5));
+        skillsAndExperienceStore.update(skillsAndExperience => [...skillsAndExperience].sort(() => Math.random() - 0.5));
 
         return `Done.`;
     }
 
     private expandCards() {
-        const projects = get(projectStore);
-        const skillsAndExperience = get(skillsAndExperienceStore);
-        projectStore.set(projects.map((card) => {
-            card.isExpanded = true;
-            return card;
-        }));
-        skillsAndExperienceStore.set(skillsAndExperience.map((card) => {
-            card.isExpanded = true;
-            return card;
-        }));
+        projectStore.update(projects => projects.map(card => ({ ...card, isExpanded: true })));
+        skillsAndExperienceStore.update(skillsAndExperience => skillsAndExperience.map(card => ({ ...card, isExpanded: true })));
 
         return `Done.`;
     }
 
     private collapseCards() {
-        const projects = get(projectStore);
-        const skillsAndExperience = get(skillsAndExperienceStore);
-        projectStore.set(projects.map((card) => {
-            card.isExpanded = false;
-            return card;
-        }));
-        skillsAndExperienceStore.set(skillsAndExperience.map((card) => {
-            card.isExpanded = false;
-            return card;
-        }));
+        projectStore.update(projects => projects.map(card => ({ ...card, isExpanded: false })));
+        skillsAndExperienceStore.update(skillsAndExperience => skillsAndExperience.map(card => ({ ...card, isExpanded: false })));
 
         return `Done.`;
     }
