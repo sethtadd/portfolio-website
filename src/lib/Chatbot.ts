@@ -1,4 +1,5 @@
 import { projectStore, skillsAndExperienceStore } from "$lib/stores";
+import { get } from "svelte/store";
 
 export class Chatbot {
     public awaitingAssistantResponse: boolean = false;
@@ -45,8 +46,8 @@ export class Chatbot {
             },
         },
         {
-            "name": "randomize_cards_order",
-            "description": "Randomizes the order of the cards on the page.",
+            "name": "get_cards_layout",
+            "description": "Returns the current layout of the cards (which, effectively, compose the website) on the page. The order of the contents is the same as the order of the cards on the page that the user sees. The content of each card is omitted for conciseness, you can use get_card_content to retrieve the content of a specific card.",
             "parameters": {
                 "type": "object",
                 "properties": {},
@@ -54,57 +55,183 @@ export class Chatbot {
             },
         },
         {
-            "name": "expand_cards",
-            "description": "Expands all the cards on the page.",
+            "name": "get_card_content",
+            "description": "Returns the content of a specific card. It is recommended to subsequently expand the card using expand_card to emphasize the card you are talking about.",
             "parameters": {
                 "type": "object",
-                "properties": {},
-                "required": [],
+                "properties": {
+                    "card_title": {
+                        "type": "string",
+                        "description": "The title of the card whose content you want to retrieve. Case sensitive.",
+                    },
+                },
+                "required": ["card_title"],
             },
         },
         {
-            "name": "collapse_cards",
-            "description": "Collapses all the cards on the page.",
+            "name": "expand_card",
+            "description": "Expands a specific card.",
             "parameters": {
                 "type": "object",
-                "properties": {},
-                "required": [],
+                "properties": {
+                    "card_title": {
+                        "type": "string",
+                        "description": "The title of the card you want to expand. Case sensitive.",
+                    },
+                },
+                "required": ["card_title"],
             },
+        },
+        {
+            "name": "collapse_card",
+            "description": "Collapses a specific card.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "card_title": {
+                        "type": "string",
+                        "description": "The title of the card you want to collapse. Case sensitive.",
+                    },
+                },
+                "required": ["card_title"],
+            },
+        },
+        {
+            "name": "set_project_cards_order",
+            "description": "Sets the order of cards in the project section.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "project_order": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "An ordered list of project card titles dictating the display order. Titles not in this list will be removed from display."
+                    }
+                },
+                "required": ["project_order"]
+            }
         },
     ]
 
     private functions: { [key: string]: (...args: any[]) => string } = {
         "alert_message": this.alert_message,
-        "randomize_cards_order": this.randomizeCardsOrder,
-        "expand_cards": this.expandCards,
-        "collapse_cards": this.collapseCards,
+        "get_cards_layout": this.getCardsLayout,
+        "get_card_content": this.getCardContent,
+        "expand_card": this.expandCard,
+        "collapse_card": this.collapseCard,
+        "set_project_cards_order": this.setProjectCardsOrder,
+        "set_skills_and_experience_cards_order": this.setSkillsAndExperienceCardsOrder,
     };
 
+
+    private getCardsLayout(): string {
+        return JSON.stringify({
+            projects: get(projectStore).map(card => ({ ...card, content: "" })),
+            skillsAndExperience: get(skillsAndExperienceStore).map(card => ({ ...card, content: "" }))
+        });
+    }
+
+    private getCardContent(cardTitle: string): string {
+        const projectCard = get(projectStore).find(card => card.title === cardTitle);
+        if (projectCard) return projectCard.content;
+
+        const skillsAndExperienceCard = get(skillsAndExperienceStore).find(card => card.title === cardTitle);
+        if (skillsAndExperienceCard) return skillsAndExperienceCard.content;
+
+        return "Card not found.";
+    }
+
+    private expandCard(cardTitle: string): string {
+        let cardFound = false;
+
+        projectStore.update(projects => {
+            return projects.map(card => {
+                if (card.title === cardTitle) {
+                    cardFound = true;
+                    return { ...card, isExpanded: true };
+                }
+                return card;
+            });
+        });
+
+        if (cardFound) return `Expanded card ${cardTitle}.`;
+
+        skillsAndExperienceStore.update(skillsAndExperience => {
+            return skillsAndExperience.map(card => {
+                if (card.title === cardTitle) {
+                    cardFound = true;
+                    return { ...card, isExpanded: true };
+                }
+                return card;
+            });
+        });
+
+        if (cardFound) return `Expanded card ${cardTitle}.`;
+        else return `Card ${cardTitle} not found.`;
+    }
+
+    private collapseCard(cardTitle: string): string {
+        let cardFound = false;
+
+        projectStore.update(projects => {
+            return projects.map(card => {
+                if (card.title === cardTitle) {
+                    cardFound = true;
+                    return { ...card, isExpanded: false };
+                }
+                return card;
+            });
+        });
+
+        if (cardFound) return `Collapsed card ${cardTitle}.`;
+
+        skillsAndExperienceStore.update(skillsAndExperience => {
+            return skillsAndExperience.map(card => {
+                if (card.title === cardTitle) {
+                    cardFound = true;
+                    return { ...card, isExpanded: false };
+                }
+                return card;
+            });
+        });
+
+        if (cardFound) return `Collapsed card ${cardTitle}.`;
+        else return `Card ${cardTitle} not found.`;
+    }
 
     private alert_message(message: string): string {
         alert(message);
         return `Done.`;
     }
 
-    private randomizeCardsOrder(): string {
-        projectStore.update(projects => [...projects].sort(() => Math.random() - 0.5));
-        skillsAndExperienceStore.update(skillsAndExperience => [...skillsAndExperience].sort(() => Math.random() - 0.5));
+    private setProjectCardsOrder(projectOrder: string[]): string {
+        projectStore.update(cards => {
+            return projectOrder.reduce((acc, title) => {
+                const foundCard = cards.find(card => card.title === title);
+                if (foundCard) {
+                    acc.push(foundCard);
+                }
+                return acc;
+            }, [] as typeof cards);
+        });
 
-        return `Done.`;
+        return "Done.";
     }
 
-    private expandCards() {
-        projectStore.update(projects => projects.map(card => ({ ...card, isExpanded: true })));
-        skillsAndExperienceStore.update(skillsAndExperience => skillsAndExperience.map(card => ({ ...card, isExpanded: true })));
+    private setSkillsAndExperienceCardsOrder(skillsAndExperienceOrder: string[]): string {
+        skillsAndExperienceStore.update(cards => {
+            return skillsAndExperienceOrder.reduce((acc, title) => {
+                const foundCard = cards.find(card => card.title === title);
+                if (foundCard) {
+                    acc.push(foundCard);
+                }
+                return acc;
+            }, [] as typeof cards);
+        });
 
-        return `Done.`;
-    }
-
-    private collapseCards() {
-        projectStore.update(projects => projects.map(card => ({ ...card, isExpanded: false })));
-        skillsAndExperienceStore.update(skillsAndExperience => skillsAndExperience.map(card => ({ ...card, isExpanded: false })));
-
-        return `Done.`;
+        return "Done.";
     }
 
     constructor(messages?: { role: string; content: string; }[]) {
@@ -165,29 +292,33 @@ export class Chatbot {
     public async generateResponse(
         model: string = "gpt-4"
     ) {
-        let response: { [key: string]: any } = await this.chatCompletionRequest(this.messages, this.function_jsons);
-        let message = response["message"];
-        this.messages.push(message);
+        try {
+            let response: { [key: string]: any } = await this.chatCompletionRequest(this.messages, this.function_jsons);
+            // TODO have API forward raw OpenAI response, use this line once that's done
+            // response = response["choices"][0];
+            let message = response["message"];
+            this.messages.push(message);
 
-        // function handling
-        if (response["finish_reason"] === "function_call") {
-            let func_name = response["message"]["function_call"]["name"];
-            let func = this.functions[func_name];
-            let func_args = JSON.parse(response["message"]["function_call"]["arguments"]);
-            console.log("Function call: " + func_name);
-            let func_response = func.apply(null, Object.values(func_args));
-            this.messages.push({
-                role: "function",
-                name: func_name,
-                content: func_response,
-            });
+            // function handling
+            if (response["finish_reason"] === "function_call") {
+                let func_name = response["message"]["function_call"]["name"];
+                let func = this.functions[func_name];
+                let func_args = JSON.parse(response["message"]["function_call"]["arguments"]);
+                let func_response = func(...Object.values(func_args));
+                this.messages.push({
+                    role: "function",
+                    name: func_name,
+                    content: func_response,
+                });
 
-            await this.generateResponse();
-            console.log(this.messages);
-        } else if (response["finish_reason"] === "stop") {
-            // message already appended
-        } else {
-            console.error("Unhandled finish reason");
+                await this.generateResponse();
+            } else if (response["finish_reason"] === "stop") {
+                // message already appended
+            } else {
+                console.error("Unhandled finish reason:", response.finish_reason);
+            }
+        } catch (error) {
+            console.error("Error in generateResponse: " + error);
         }
     }
 }
