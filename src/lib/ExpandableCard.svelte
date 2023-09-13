@@ -2,6 +2,7 @@
 	import { slide } from 'svelte/transition';
 
 	export let expanded = false;
+	export let highlighted = false;
 	export let title: string;
 	export let summary: string;
 	export let content: string;
@@ -11,7 +12,14 @@
 	}
 </script>
 
-<div class="card {expanded ? 'expanded' : ''}">
+<div
+	class="card {expanded ? 'expanded' : ''} {highlighted ? 'highlighted' : ''}"
+	on:mouseover={() => (highlighted = false)}
+	on:focus={() => (highlighted = false)}
+	role="button"
+	tabindex="0"
+	aria-roledescription="Mousing over or focusing this card will stop the highlight animation."
+>
 	<h2>{title}</h2>
 	{#if expanded}
 		<p transition:slide>{content}</p>
@@ -35,7 +43,7 @@
 		border-radius: 5px;
 
 		border-style: solid;
-		border-width: 2px;
+		border-width: 3px;
 		border-color: transparent;
 		transition: box-shadow 0.2s ease-in-out;
 		transition: background-color 0.2s ease-in-out;
@@ -43,10 +51,15 @@
 	.card:hover {
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 	}
-    
-    .card:hover:not(.expanded) {
-        background-color: #666;
-    }
+
+	.card:hover:not(.expanded) {
+		background: rgb(148, 121, 71); /* 70% #666 + 30% rbg(255, 165, 0) */
+	}
+
+	.card.highlighted {
+		animation: pulse 1.5s;
+		animation-iteration-count: infinite;
+	}
 
 	button.toggle {
 		background: none;
@@ -90,6 +103,16 @@
 		}
 		60% {
 			transform: translateY(-2px);
+		}
+	}
+
+	@keyframes pulse {
+		0%,
+		100% {
+			background: #666;
+		}
+		50% {
+			background: rgb(148, 121, 71); /* 70% #666 + 30% rbg(255, 165, 0) */
 		}
 	}
 </style>

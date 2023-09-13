@@ -14,13 +14,14 @@
 	</div>
 	<div class="column">
 		<h1>Projects</h1>
-		<!--using <ul> for animation:flip effect, no styling-->
+		<!--using <ul> for animate:flip effect on <li>, no styling-->
 		<ul style="list-style-type:none;padding:0;margin:0;">
 			{#if $projectStore.length}
 				{#each $projectStore as card (card.title)}
 					<li animate:flip={{ duration: 500 }} style="padding:0;margin:0;">
 						<ExpandableCard
 							bind:expanded={card.isExpanded}
+							bind:highlighted={card.isHighlighted}
 							title={card.title}
 							summary={card.summary}
 							content={card.content}
@@ -34,13 +35,14 @@
 	</div>
 	<div class="column">
 		<h1>Skills & Experience</h1>
-		<!--using <ul> for animation:flip effect, no styling-->
+		<!--using <ul> for animate:flip effect on <li>, no styling-->
 		<ul style="list-style-type:none;padding:0;margin:0;">
 			{#if $skillsAndExperienceStore.length}
 				{#each $skillsAndExperienceStore as card (card.title)}
 					<li animate:flip={{ duration: 500 }} style="padding:0;margin:0;">
 						<ExpandableCard
 							bind:expanded={card.isExpanded}
+							bind:highlighted={card.isHighlighted}
 							title={card.title}
 							summary={card.summary}
 							content={card.content}

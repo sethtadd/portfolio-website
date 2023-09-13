@@ -32,22 +32,8 @@ export class Chatbot {
 
     private function_jsons: any[] = [
         {
-            "name": "alert_message",
-            "description": "Calls alert() in the browser.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "message": {
-                        "type": "string",
-                        "description": "The message to be passed to alert().",
-                    },
-                },
-                "required": ["message"],
-            },
-        },
-        {
             "name": "get_cards_layout",
-            "description": "Returns the current layout of the cards (which, effectively, compose the website) on the page. The order of the contents is the same as the order of the cards on the page that the user sees. The content of each card is omitted for conciseness, you can use get_card_content to retrieve the content of a specific card.",
+            "description": "Returns the current layout of the cards on the page. The order of the card matches what the user sees. The content of each card is omitted for conciseness, you can use get_card_content to retrieve the content of a specific card.",
             "parameters": {
                 "type": "object",
                 "properties": {},
@@ -113,16 +99,30 @@ export class Chatbot {
                 "required": ["project_order"]
             }
         },
+        {
+            "name": "highlight_card",
+            "description": "Highlights a specific card by making it pulse orange. You cannot stop the highlight effect, but the user can mouse over the card to stop the pulsing.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "card_title": {
+                        "type": "string",
+                        "description": "The title of the card you want to highlight. Case sensitive.",
+                    },
+                },
+                "required": ["card_title"],
+            },
+        }
     ]
 
     private functions: { [key: string]: (...args: any[]) => string } = {
-        "alert_message": this.alert_message,
         "get_cards_layout": this.getCardsLayout,
         "get_card_content": this.getCardContent,
         "expand_card": this.expandCard,
         "collapse_card": this.collapseCard,
         "set_project_cards_order": this.setProjectCardsOrder,
         "set_skills_and_experience_cards_order": this.setSkillsAndExperienceCardsOrder,
+        "highlight_card": this.highlightCard,
     };
 
 
@@ -201,9 +201,33 @@ export class Chatbot {
         else return `Card ${cardTitle} not found.`;
     }
 
-    private alert_message(message: string): string {
-        alert(message);
-        return `Done.`;
+    private highlightCard(cardTitle: string): string {
+        let cardFound = false;
+
+        projectStore.update(projects => {
+            return projects.map(card => {
+                if (card.title === cardTitle) {
+                    cardFound = true;
+                    return { ...card, isHighlighted: true };
+                }
+                return card;
+            });
+        });
+
+        if (cardFound) return `Highlighted card ${cardTitle}.`;
+
+        skillsAndExperienceStore.update(skillsAndExperience => {
+            return skillsAndExperience.map(card => {
+                if (card.title === cardTitle) {
+                    cardFound = true;
+                    return { ...card, isHighlighted: true };
+                }
+                return card;
+            });
+        });
+
+        if (cardFound) return `Highlighted card ${cardTitle}.`;
+        else return `Card ${cardTitle} not found.`;
     }
 
     private setProjectCardsOrder(projectOrder: string[]): string {
