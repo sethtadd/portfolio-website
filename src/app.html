@@ -15,15 +15,30 @@
 </html>
 
 <style>
+	:root {
+		--text: #effbf9;
+		--background: #030c0b;
+		--primary: #325b55;
+		--secondary: #08211e;
+		--accent: #a45cca;
+
+		--chat-user: #9e52c7;
+		--chat-assistant: #29a38f;
+		--chat-system: #9d8484;
+		--chat-function: #b99d0e;
+
+		--chat-input-box: #145247;
+	}
+
 	h1 {
 		/* Make h1 (in nav) consistent with rest of site */
 		font-size: 2em;
 	}
 
 	body {
-		background-color: #111;
-		font-family: Arial, sans-serif;
-		color: #f0f0f0;
+		background-color: var(--background);
+		font-family: Inter, sans-serif;
+		color: var(--text);
 		margin: 0;
 		padding: 0;
 	}

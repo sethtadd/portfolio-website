@@ -94,7 +94,7 @@
 
 		/* Scrollbar styling for Firefox */
 		scrollbar-width: thin;
-		scrollbar-color: orange transparent;
+		scrollbar-color: var(--accent) transparent;
 	}
 
 	/* Scrollbar styling for Webkit browsers */
@@ -105,7 +105,7 @@
 		background: transparent;
 	}
 	.message-box::-webkit-scrollbar-thumb {
-		background-color: orange;
+		background-color: var(--accent);
 		border-radius: 4px;
 	}
 
@@ -114,20 +114,25 @@
 		padding: 0.5em;
 		margin: 0.5em;
 		border-radius: 10px;
+		border: 1px solid var(--text);
+
+		max-width: 13vw; /* prevent messages from getting too wide */
 	}
 	.message.user {
-		background-color: orange;
+		background-color: var(--chat-user);
 		border-radius: 10px 10px 0px 10px;
 	}
 	.message.assistant {
-		background-color: #858585;
+		background-color: var(--chat-assistant);
 		border-radius: 10px 10px 10px 0px;
 	}
 	.message.system {
-		background-color: #9d8484;
+		background-color: var(--chat-system);
 	}
 	.message.function {
-		background-color: #b99d0e;
+		background-color: var(--chat-function);
+		overflow-wrap: break-word;
+		word-wrap: break-word; /* Older browsers */
 	}
 	.function-name {
 		font-weight: bold;
@@ -146,21 +151,23 @@
 
 		padding: 0.5em;
 		margin-top: 1em;
-		border-style: none;
-		border-radius: 5px 5px 0px 5px;
-		background-color: #797979;
-		color: white;
+		border-style: solid;
+		border-radius: 10px 10px 0px 10px;
+		border-color: var(--accent);
+		background-color: var(--chat-input-box);
+		color: var(--text);
 
-		border: 2px solid transparent;
+		/* border: 2px solid transparent; */
 		transition: border-color 0.3s ease;
 	}
 	.user-input:focus {
-		border-color: orange;
+		border-color: var(--accent);
 		outline: none; /* Remove the default browser outline */
 	}
 	.user-input::placeholder {
-		color: #a7a7a7;
+		color: var(--text);
 		font-style: italic;
+		opacity: 0.5;
 	}
 
 	.typing-indicator {
@@ -168,8 +175,9 @@
 		padding: 0.5rem;
 		margin: 0.5rem;
 		border-radius: 5px;
-		background-color: #858585;
+		background-color: var(--chat-assistant);
 		border-radius: 10px 10px 10px 0px;
+		border: 1px solid var(--text);
 	}
 	.typing-indicator-wrapper {
 		text-align: left;
@@ -180,7 +188,7 @@
 		height: 5px;
 		margin-left: 2px;
 		margin-right: 2px;
-		background: #ffffff;
+		background: var(--text);
 		border-radius: 50%;
 		animation: bounce 1.4s infinite ease-in-out both;
 	}

@@ -37,7 +37,7 @@
 <style>
 	.card {
 		padding: 1rem;
-		background-color: #555;
+		background-color: var(--primary);
 		margin-bottom: 1rem;
 
 		border-radius: 5px;
@@ -53,7 +53,7 @@
 	}
 
 	.card:hover:not(.expanded) {
-		background: rgb(148, 121, 71); /* 70% #666 + 30% rbg(255, 165, 0) */
+		background: var(--accent);
 	}
 
 	.card.highlighted {
@@ -63,7 +63,7 @@
 
 	button.toggle {
 		background: none;
-		color: orange;
+		color: var(--secondary);
 		border: none;
 		padding: 0.25rem 1rem;
 		margin: 0;
@@ -109,10 +109,10 @@
 	@keyframes pulse {
 		0%,
 		100% {
-			background: #666;
+			background: var(--primary);
 		}
 		50% {
-			background: rgb(148, 121, 71); /* 70% #666 + 30% rbg(255, 165, 0) */
+			background: var(--accent);
 		}
 	}
 </style>

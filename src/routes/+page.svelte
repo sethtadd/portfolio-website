@@ -58,13 +58,13 @@
 
 <style>
 	h1 {
-		color: orange;
+		color: var(--text);
 	}
 	.grid-container {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		gap: 2rem;
-		background-color: #333;
+		background-color: var(--secondary);
 		padding: 2rem;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 		border-radius: 5px;
@@ -76,16 +76,18 @@
 		position: relative;
 		padding: 0 1rem;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-		border-radius: 5px;
+		
+		max-width: 20vw;
 
+		border-radius: 5px;
 		border-style: solid;
 		border-width: 3px 0 0 0;
-		border-color: orange;
+		border-color: var(--accent);
 	}
 
 	.chatbot-card {
 		padding: 1rem;
-		background-color: #555;
+		background-color: var(--primary);
 		margin-bottom: 1rem;
 
 		border-style: solid;

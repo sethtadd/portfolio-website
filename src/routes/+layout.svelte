@@ -13,17 +13,16 @@
 	}
 
 	nav {
-		background-color: #333;
+		background-color: var(--secondary);
 		padding: 2rem;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 		border-radius: 5px;
 		max-width: 60vw;
 		margin: 2rem auto;
-		z-index: 1000;
 	}
 
 	nav h1 {
-		color: orange;
+		color: var(--text);
 		margin: 0;
 	}
 </style>
