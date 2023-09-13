@@ -1,10 +1,10 @@
 <script lang="ts">
-	// import { marked } from "marked";
-	import { onMount, tick } from 'svelte';
+	// import { marked } from "marked";  // TODO implement markdown support on chat messages
+	import { onDestroy, onMount, tick } from 'svelte';
 	import { Chatbot } from './Chatbot';
 
-	// for auto scroll-to-bottom in chat box:
-	// https://svelte.dev/repl/990f4b539fa44d48aaf9091c697076dd?version=3.48.0
+	import { derived, type Unsubscriber } from 'svelte/store';
+
 	let scrollDiv: HTMLDivElement;
 	let userMessage = '';
 	let chatbot = new Chatbot();
@@ -17,6 +17,8 @@
 		});
 	}
 
+	const messages = derived(chatbot.messageStore, ($messageStore) => $messageStore);
+
 	async function sendMessage(event: KeyboardEvent) {
 		if (chatbot.awaitingAssistantResponse || userMessage.trim() === '') return;
 
@@ -24,21 +26,29 @@
 		chatbot.awaitingAssistantResponse = true;
 		chatbot.appendUserMessage(userMessage);
 		userMessage = '';
-		scrollToBottom(scrollDiv);
 
 		// get assistant response
 		await chatbot.generateResponse();
 		chatbot.awaitingAssistantResponse = false; // TODO move to Chatbot.ts?
-		scrollToBottom(scrollDiv);
 	}
 
+	let unsubscribe: Unsubscriber;
+
 	onMount(() => {
-		scrollToBottom(scrollDiv);
+		unsubscribe = chatbot.messageStore.subscribe((messages) => {
+			scrollToBottom(scrollDiv);
+		});
+	});
+
+	onDestroy(() => {
+		if (unsubscribe) {
+			unsubscribe();
+		}
 	});
 </script>
 
 <div class="message-box" bind:this={scrollDiv}>
-	{#each chatbot.messages as message}
+	{#each $messages as message}
 		<div class="message-wrapper {message.role}">
 			<div class="message {message.role}">
 				{#if message.name}
@@ -46,7 +56,11 @@
 				{:else if message.function_call}
 					<span class="function-name">CALL {message.function_call.name}</span><br />
 				{/if}
-				{message.content || message.function_call?.arguments || ''}
+				<!--Sometimes the OpenAI API seems to return message content alongside a function call; so we account for that possibility here-->
+				{#if message.function_call}
+					<b>{message.function_call.arguments}</b><br />
+				{/if}
+				{message.content || ''}
 			</div>
 		</div>
 	{/each}

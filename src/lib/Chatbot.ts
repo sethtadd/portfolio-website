@@ -1,10 +1,10 @@
 import { projectStore, skillsAndExperienceStore } from "$lib/stores";
-import { get } from "svelte/store";
+import { get, writable } from "svelte/store";
 
 export class Chatbot {
     public awaitingAssistantResponse: boolean = false;
 
-    public messages: { role: string; name?: string; content: string; function_call?: { name: any; arguments: any; } }[] = [
+    private initialMessages: { role: string; name?: string; content: string; function_call?: { name: any; arguments: any; } }[] = [
         {
             role: "system",
             content:
@@ -29,6 +29,8 @@ export class Chatbot {
                 'Feel free to ask me questions like "show me a random project" or "tell me about his skills"',
         },
     ];
+
+    public messageStore = writable(this.initialMessages);
 
     private function_jsons: any[] = [
         {
@@ -259,7 +261,7 @@ export class Chatbot {
     }
 
     constructor(messages?: { role: string; content: string; }[]) {
-        if (messages) this.messages = messages;
+        if (messages) this.messageStore.set(messages);
     }
 
     public async chatCompletionRequest(
@@ -310,18 +312,19 @@ export class Chatbot {
 
     public appendUserMessage(message: string) {
         // TODO dompurify this
-        this.messages.push({ role: "user", content: message })
+        this.messageStore.update(messages => [...messages, { role: "user", content: message }]);
     }
 
     public async generateResponse(
         model: string = "gpt-4"
     ) {
         try {
-            let response: { [key: string]: any } = await this.chatCompletionRequest(this.messages, this.function_jsons);
+            let response: { [key: string]: any } = await this.chatCompletionRequest(get(this.messageStore), this.function_jsons, model);
+
             // TODO have API forward raw OpenAI response, use this line once that's done
             // response = response["choices"][0];
             let message = response["message"];
-            this.messages.push(message);
+            this.messageStore.update(messages => [...messages, message]);
 
             // function handling
             if (response["finish_reason"] === "function_call") {
@@ -329,11 +332,11 @@ export class Chatbot {
                 let func = this.functions[func_name];
                 let func_args = JSON.parse(response["message"]["function_call"]["arguments"]);
                 let func_response = func(...Object.values(func_args));
-                this.messages.push({
+                this.messageStore.update(messages => [...messages, {
                     role: "function",
                     name: func_name,
                     content: func_response,
-                });
+                }]);
 
                 await this.generateResponse();
             } else if (response["finish_reason"] === "stop") {
