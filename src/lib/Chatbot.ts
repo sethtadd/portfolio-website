@@ -103,7 +103,7 @@ export class Chatbot {
         },
         {
             "name": "highlight_card",
-            "description": "Highlights a specific card by making it pulse orange. You cannot stop the highlight effect, but the user can mouse over the card to stop the pulsing.",
+            "description": "Highlights a specific card by making it pulse another color. You cannot stop the highlight effect, but the user can mouse over the card to stop the pulsing.",
             "parameters": {
                 "type": "object",
                 "properties": {

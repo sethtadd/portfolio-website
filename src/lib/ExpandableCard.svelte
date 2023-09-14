@@ -42,11 +42,10 @@
 
 		border-radius: 5px;
 
-		border-style: solid;
-		border-width: 3px;
-		border-color: transparent;
 		transition: box-shadow 0.2s ease-in-out;
 		transition: background-color 0.2s ease-in-out;
+
+		width: 15vw; /* Width independent of content */
 	}
 	.card:hover {
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);

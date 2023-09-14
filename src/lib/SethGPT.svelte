@@ -93,26 +93,26 @@
 		border-radius: 5px;
 
 		/* Scrollbar styling for Firefox */
-		scrollbar-width: thin;
-		scrollbar-color: var(--accent) transparent;
+		scrollbar-width: 2px;
+		scrollbar-color: var(--text) transparent;
 	}
 
 	/* Scrollbar styling for Webkit browsers */
 	.message-box::-webkit-scrollbar {
-		width: 4px;
+		width: 2px;
 	}
 	.message-box::-webkit-scrollbar-track {
 		background: transparent;
 	}
 	.message-box::-webkit-scrollbar-thumb {
-		background-color: var(--accent);
+		background-color: var(--text);
 		border-radius: 4px;
 	}
 
 	.message {
 		display: inline-block;
 		padding: 0.5em;
-		margin: 0.5em;
+		margin: 0.25em 0.5em;
 		border-radius: 10px;
 		border: 1px solid var(--text);
 
@@ -151,17 +151,15 @@
 
 		padding: 0.5em;
 		margin-top: 1em;
-		border-style: solid;
 		border-radius: 10px 10px 0px 10px;
-		border-color: var(--accent);
-		background-color: var(--chat-input-box);
+		border: 1px solid var(--text);
+		background-color: var(--primary);
 		color: var(--text);
 
-		/* border: 2px solid transparent; */
-		transition: border-color 0.3s ease;
+		transition: box-shadow 0.3s ease;
 	}
 	.user-input:focus {
-		border-color: var(--accent);
+		box-shadow: 0 0 1px 1px var(--text);
 		outline: none; /* Remove the default browser outline */
 	}
 	.user-input::placeholder {

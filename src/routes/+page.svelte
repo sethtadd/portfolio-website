@@ -7,7 +7,7 @@
 
 <div class="grid-container">
 	<div class="column">
-		<h1>Chatbot</h1>
+		<h1>SethGPT</h1>
 		<div class="chatbot-card">
 			<SethGpt />
 		</div>
