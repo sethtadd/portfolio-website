@@ -108,7 +108,7 @@
 		/>
 		<button id="send" title="Send message" on:click={sendMessage}>
 			<img
-				src="/send.svg"
+				src="/send-message.svg"
 				alt="An icon to indicate that the button sends the message."
 				height="25rem"
 			/>
