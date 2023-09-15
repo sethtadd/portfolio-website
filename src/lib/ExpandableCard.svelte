@@ -22,7 +22,7 @@
 >
 	<h2>{title}</h2>
 	{#if expanded}
-		<p transition:slide>{content}</p>
+		<p transition:slide>{@html content}</p>
 	{:else}
 		<p transition:slide>{summary}</p>
 	{/if}

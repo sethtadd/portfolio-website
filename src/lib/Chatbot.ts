@@ -44,7 +44,7 @@ export class Chatbot {
         },
         {
             "name": "get_card_content",
-            "description": "Returns the content of a specific card. It is recommended to subsequently expand the card using expand_card to emphasize the card you are talking about.",
+            "description": "Returns the content of a specific card. It is recommended to subsequently move the card to the top (set_project_cards_order), expand it, and then highlight it to emphasize the card you are talking about. The user can read the contents of the card, so be VERY brief when talking about it and then ask the user if they want to know more.",
             "parameters": {
                 "type": "object",
                 "properties": {
