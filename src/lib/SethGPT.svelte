@@ -152,6 +152,14 @@
 		border-radius: 4px;
 	}
 
+	.message-wrapper.user {
+		text-align: right;
+	}
+
+	.message-wrapper .user {
+		text-align: left;
+	}
+
 	.message {
 		display: inline-block;
 		padding: 0.5em;
@@ -181,7 +189,7 @@
 		display: inline-block;
 		padding: 0.25rem;
 		margin: 0.25rem 0;
-		background-color: black;
+		background-color: var(--background);
 		font-weight: bold;
 		border-radius: 5px;
 		border: 1px solid var(--text);
