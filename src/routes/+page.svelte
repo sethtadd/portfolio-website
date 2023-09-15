@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ExpandableCard from '$lib/ExpandableCard.svelte';
-	import SethGpt from '$lib/SethGPT.svelte';
+	import Chatbot from '$lib/Chatbot.svelte';
 	import { projectStore, skillsAndExperienceStore } from '$lib/stores';
 	import { flip } from 'svelte/animate';
 </script>
@@ -9,7 +9,7 @@
 	<div class="column">
 		<h1>SethGPT</h1>
 		<div class="chatbot-card">
-			<SethGpt />
+			<Chatbot />
 		</div>
 	</div>
 	<div class="column">

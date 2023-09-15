@@ -24,18 +24,14 @@
 	{#if expanded}
 		<p transition:slide>{@html content}</p>
 	{:else}
-		<p transition:slide>{summary}</p>
+		<p transition:slide><em>{@html summary}</em></p>
 	{/if}
 	<button
 		class="toggle"
 		on:click={toggleExpand}
 		aria-label={expanded ? 'Collapse content' : 'Expand Content'}
 		><span class="content" title={expanded ? 'Collapse content' : 'Expand Content'}
-			><img
-				src="expand-card.svg"
-				alt="A symbol indicating that the button expands the card"
-				height="20"
-			/></span
+			><img src="expand-card.svg" alt="An expand/collapse content symbol" height="20" /></span
 		></button
 	>
 </div>

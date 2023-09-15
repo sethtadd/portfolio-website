@@ -17,7 +17,7 @@ export const focusCardJson = {
         "properties": {
             "card_title": {
                 "type": "string",
-                "description": "The title of the card you want to focus. Case sensitive.",
+                "description": "The title of the card you want to focus.",
             },
         },
         "required": ["card_title"],
@@ -27,13 +27,13 @@ export const focusCardJson = {
 
 export const getCardContentJson = {
     "name": "get_card_content",
-    "description": "Returns the content of a specific card. It is recommended to subsequently move the card to the top (set_project_cards_order), expand it, and then highlight it to emphasize the card you are talking about. The user can read the contents of the card, so be VERY brief when talking about it and then ask the user if they want to know more.",
+    "description": "Returns the content of the specific card. It is recommended to call focus_card on the card you are talking about. The user can read the contents of the card, so be VERY brief when talking about it, and ask the user if they want to know more.",
     "parameters": {
         "type": "object",
         "properties": {
             "card_title": {
                 "type": "string",
-                "description": "The title of the card whose content you want to retrieve. Case sensitive.",
+                "description": "The title of the card whose content you want to retrieve.",
             },
         },
         "required": ["card_title"],
@@ -49,7 +49,7 @@ export const setCardExpandedJson = {
         "properties": {
             "card_title": {
                 "type": "string",
-                "description": "The title of the card you want to expand or collapse. Case sensitive.",
+                "description": "The title of the card you want to expand or collapse.",
             },
             "expanded": {
                 "type": "boolean",
@@ -69,7 +69,7 @@ export const highlightCardJson = {
         "properties": {
             "card_title": {
                 "type": "string",
-                "description": "The title of the card you want to highlight. Case sensitive.",
+                "description": "The title of the card you want to highlight.",
             },
         },
         "required": ["card_title"],
@@ -104,7 +104,7 @@ export const setSkillsAndExperienceCardsOrderJson = {
         "properties": {
             "card_title": {
                 "type": "string",
-                "description": "The title of the card you want to highlight. Case sensitive.",
+                "description": "The title of the card you want to highlight.",
             },
         },
         "required": ["card_title"],

@@ -95,7 +95,7 @@
 				scrollToEndOfChat();
 			}}
 		>
-			<img src={messagesHidden ? '/eye-closed.svg' : '/eye-open.svg'} alt="eye" height="30rem" />
+			<img src={messagesHidden ? '/eye-closed.svg' : '/eye-open.svg'} alt="eye" height="25rem" />
 		</button>
 		<input
 			type="text"
@@ -130,6 +130,7 @@
 	}
 
 	.message-box {
+		flex: 1;
 		width: 100%;
 		box-sizing: border-box;
 		overflow-y: auto;
@@ -273,23 +274,34 @@
 	#toggle-hidden-messages {
 		background: none;
 		border: none;
-		padding: 0;
+		padding: 2px;
 		margin: 0;
 		cursor: pointer;
+		border: 1px solid transparent;
+		border-radius: 5px;
+		transition: border-color 0.2s ease-in-out;
 	}
-
 	#toggle-hidden-messages img {
 		vertical-align: middle;
 	}
+	#toggle-hidden-messages:hover {
+		border-color: var(--text);
+	}
+
 	#send {
 		border: none;
-		padding: 0;
+		padding: 2px;
 		margin: 0;
 		background: none;
 		cursor: pointer;
+		border: 1px solid transparent;
+		border-radius: 5px;
+		transition: border-color 0.2s ease-in-out;
 	}
-
 	#send img {
 		vertical-align: middle;
+	}
+	#send:hover {
+		border-color: var(--text);
 	}
 </style>
