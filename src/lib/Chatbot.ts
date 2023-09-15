@@ -1,5 +1,6 @@
-import { projectStore, skillsAndExperienceStore } from "$lib/stores";
 import { get, writable } from "svelte/store";
+import * as ChatbotFunctionJsons from "./ChatbotFunctionJsons";
+import * as ChatbotFunctions from "./ChatbotFunctions";
 
 export class Chatbot {
     public awaitingAssistantResponse: boolean = false;
@@ -33,232 +34,24 @@ export class Chatbot {
     public messageStore = writable(this.initialMessages);
 
     private function_jsons: any[] = [
-        {
-            "name": "get_cards_layout",
-            "description": "Returns the current layout of the cards on the page. The order of the card matches what the user sees. The content of each card is omitted for conciseness, you can use get_card_content to retrieve the content of a specific card.",
-            "parameters": {
-                "type": "object",
-                "properties": {},
-                "required": [],
-            },
-        },
-        {
-            "name": "get_card_content",
-            "description": "Returns the content of a specific card. It is recommended to subsequently move the card to the top (set_project_cards_order), expand it, and then highlight it to emphasize the card you are talking about. The user can read the contents of the card, so be VERY brief when talking about it and then ask the user if they want to know more.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "card_title": {
-                        "type": "string",
-                        "description": "The title of the card whose content you want to retrieve. Case sensitive.",
-                    },
-                },
-                "required": ["card_title"],
-            },
-        },
-        {
-            "name": "expand_card",
-            "description": "Expands a specific card.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "card_title": {
-                        "type": "string",
-                        "description": "The title of the card you want to expand. Case sensitive.",
-                    },
-                },
-                "required": ["card_title"],
-            },
-        },
-        {
-            "name": "collapse_card",
-            "description": "Collapses a specific card.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "card_title": {
-                        "type": "string",
-                        "description": "The title of the card you want to collapse. Case sensitive.",
-                    },
-                },
-                "required": ["card_title"],
-            },
-        },
-        {
-            "name": "set_project_cards_order",
-            "description": "Sets the order of cards in the project section.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "project_order": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "description": "An ordered list of project card titles dictating the display order. Titles not in this list will be removed from display."
-                    }
-                },
-                "required": ["project_order"]
-            }
-        },
-        {
-            "name": "highlight_card",
-            "description": "Highlights a specific card by making it pulse another color. You cannot stop the highlight effect, but the user can mouse over the card to stop the pulsing.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "card_title": {
-                        "type": "string",
-                        "description": "The title of the card you want to highlight. Case sensitive.",
-                    },
-                },
-                "required": ["card_title"],
-            },
-        }
+        ChatbotFunctionJsons.getCardsLayoutJson,
+        ChatbotFunctionJsons.getCardContentJson,
+        ChatbotFunctionJsons.focusCardJson,
+        ChatbotFunctionJsons.setCardExpandedJson,
+        ChatbotFunctionJsons.highlightCardJson,
+        ChatbotFunctionJsons.setProjectCardsOrderJson,
+        ChatbotFunctionJsons.setSkillsAndExperienceCardsOrderJson,
     ]
 
     private functions: { [key: string]: (...args: any[]) => string } = {
-        "get_cards_layout": this.getCardsLayout,
-        "get_card_content": this.getCardContent,
-        "expand_card": this.expandCard,
-        "collapse_card": this.collapseCard,
-        "set_project_cards_order": this.setProjectCardsOrder,
-        "set_skills_and_experience_cards_order": this.setSkillsAndExperienceCardsOrder,
-        "highlight_card": this.highlightCard,
+        "get_cards_layout": ChatbotFunctions.getCardsLayout,
+        "get_card_content": ChatbotFunctions.getCardContent,
+        "focus_card": ChatbotFunctions.focusCard,
+        "set_card_expanded": ChatbotFunctions.setCardExpanded,
+        "set_project_cards_order": ChatbotFunctions.setProjectCardsOrder,
+        "set_skills_and_experience_cards_order": ChatbotFunctions.setSkillsAndExperienceCardsOrder,
+        "highlight_card": ChatbotFunctions.highlightCard,
     };
-
-
-    private getCardsLayout(): string {
-        return JSON.stringify({
-            projects: get(projectStore).map(card => ({ ...card, content: "" })),
-            skillsAndExperience: get(skillsAndExperienceStore).map(card => ({ ...card, content: "" }))
-        });
-    }
-
-    private getCardContent(cardTitle: string): string {
-        const projectCard = get(projectStore).find(card => card.title === cardTitle);
-        if (projectCard) return projectCard.content;
-
-        const skillsAndExperienceCard = get(skillsAndExperienceStore).find(card => card.title === cardTitle);
-        if (skillsAndExperienceCard) return skillsAndExperienceCard.content;
-
-        return "Card not found.";
-    }
-
-    private expandCard(cardTitle: string): string {
-        let cardFound = false;
-
-        projectStore.update(projects => {
-            return projects.map(card => {
-                if (card.title === cardTitle) {
-                    cardFound = true;
-                    return { ...card, isExpanded: true };
-                }
-                return card;
-            });
-        });
-
-        if (cardFound) return `Expanded card ${cardTitle}.`;
-
-        skillsAndExperienceStore.update(skillsAndExperience => {
-            return skillsAndExperience.map(card => {
-                if (card.title === cardTitle) {
-                    cardFound = true;
-                    return { ...card, isExpanded: true };
-                }
-                return card;
-            });
-        });
-
-        if (cardFound) return `Expanded card ${cardTitle}.`;
-        else return `Card ${cardTitle} not found.`;
-    }
-
-    private collapseCard(cardTitle: string): string {
-        let cardFound = false;
-
-        projectStore.update(projects => {
-            return projects.map(card => {
-                if (card.title === cardTitle) {
-                    cardFound = true;
-                    return { ...card, isExpanded: false };
-                }
-                return card;
-            });
-        });
-
-        if (cardFound) return `Collapsed card ${cardTitle}.`;
-
-        skillsAndExperienceStore.update(skillsAndExperience => {
-            return skillsAndExperience.map(card => {
-                if (card.title === cardTitle) {
-                    cardFound = true;
-                    return { ...card, isExpanded: false };
-                }
-                return card;
-            });
-        });
-
-        if (cardFound) return `Collapsed card ${cardTitle}.`;
-        else return `Card ${cardTitle} not found.`;
-    }
-
-    private highlightCard(cardTitle: string): string {
-        let cardFound = false;
-
-        projectStore.update(projects => {
-            return projects.map(card => {
-                if (card.title === cardTitle) {
-                    cardFound = true;
-                    return { ...card, isHighlighted: true };
-                }
-                return card;
-            });
-        });
-
-        if (cardFound) return `Highlighted card ${cardTitle}.`;
-
-        skillsAndExperienceStore.update(skillsAndExperience => {
-            return skillsAndExperience.map(card => {
-                if (card.title === cardTitle) {
-                    cardFound = true;
-                    return { ...card, isHighlighted: true };
-                }
-                return card;
-            });
-        });
-
-        if (cardFound) return `Highlighted card ${cardTitle}.`;
-        else return `Card ${cardTitle} not found.`;
-    }
-
-    private setProjectCardsOrder(projectOrder: string[]): string {
-        projectStore.update(cards => {
-            return projectOrder.reduce((acc, title) => {
-                const foundCard = cards.find(card => card.title === title);
-                if (foundCard) {
-                    acc.push(foundCard);
-                }
-                return acc;
-            }, [] as typeof cards);
-        });
-
-        return "Done.";
-    }
-
-    private setSkillsAndExperienceCardsOrder(skillsAndExperienceOrder: string[]): string {
-        skillsAndExperienceStore.update(cards => {
-            return skillsAndExperienceOrder.reduce((acc, title) => {
-                const foundCard = cards.find(card => card.title === title);
-                if (foundCard) {
-                    acc.push(foundCard);
-                }
-                return acc;
-            }, [] as typeof cards);
-        });
-
-        return "Done.";
-    }
 
     constructor(messages?: { role: string; content: string; }[]) {
         if (messages) this.messageStore.set(messages);
