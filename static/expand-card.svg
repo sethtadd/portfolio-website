@@ -1,0 +1,6 @@
+<svg width="80" height="60" xmlns="http://www.w3.org/2000/svg">
+    <!-- First Triangle -->
+    <path d="M 10 10 L 40 30 L 70 10" fill="none" stroke="#effbf9" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+    <!-- Second Triangle -->
+    <path d="M 10 35 L 40 55 L 70 35" fill="none" stroke="#effbf9" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

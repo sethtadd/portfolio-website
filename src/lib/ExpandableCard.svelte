@@ -30,13 +30,19 @@
 		class="toggle"
 		on:click={toggleExpand}
 		aria-label={expanded ? 'Collapse content' : 'Expand Content'}
-		><span class="content" title={expanded ? 'Collapse content' : 'Expand Content'}>▼</span></button
+		><span class="content" title={expanded ? 'Collapse content' : 'Expand Content'}
+			><img
+				src="expand-card.svg"
+				alt="A symbol indicating that the button expands the card"
+				height="20"
+			/></span
+		></button
 	>
 </div>
 
 <style>
 	.card {
-		padding: 1rem;
+		padding: 1rem 1rem 0.5rem 1rem;
 		background-color: var(--primary);
 		margin-bottom: 1rem;
 
