@@ -68,7 +68,7 @@
 		padding: 2rem;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 		border-radius: 5px;
-		max-width: 60vw;
+		width: 60vw;
 		margin: 0 auto;
 	}
 
@@ -76,7 +76,7 @@
 		position: relative;
 		padding: 0 1rem;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-		
+
 		max-width: 20vw;
 
 		border-radius: 5px;
@@ -86,14 +86,6 @@
 	}
 
 	.chatbot-card {
-		padding: 1rem;
-		background-color: var(--primary);
-		margin-bottom: 1rem;
-
-		border-style: solid;
-		border-width: 2px;
-		border-color: transparent;
-		border-radius: 5px;
 		transition: box-shadow 0.2s ease-in-out;
 	}
 	.chatbot-card:hover {

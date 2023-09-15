@@ -1,0 +1,15 @@
+<svg
+    width="100"
+    height="100"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 100 100"
+>
+    <!-- Outer almond shape of the eye -->
+    <path d="M 10 50 Q 50 -10 90 50 Q 50 110 10 50 Z" stroke="#effbf9" fill="none" stroke-width="3" />
+
+    <!-- Pupil -->
+    <circle cx="50" cy="50" r="15" stroke="#effbf9" fill="none" stroke-width="3" />
+
+    <!-- Strikethrough line -->
+    <line x1="20" y1="80" x2="80" y2="20" stroke="#effbf9" stroke-width="3" stroke-linecap="round" />
+</svg>

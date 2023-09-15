@@ -1,25 +1,26 @@
 <script lang="ts">
 	// import { marked } from "marked";  // TODO implement markdown support on chat messages
 	import { onDestroy, onMount, tick } from 'svelte';
+	import { derived, type Unsubscriber } from 'svelte/store';
+	import { slide } from 'svelte/transition';
 	import { Chatbot } from './Chatbot';
 
-	import { derived, type Unsubscriber } from 'svelte/store';
-
-	let scrollDiv: HTMLDivElement;
+	let messagesScrollDiv: HTMLDivElement;
 	let userMessage = '';
 	let chatbot = new Chatbot();
+	let messagesHidden = true;
 
-	async function scrollToBottom(node: HTMLDivElement) {
+	async function scrollToEndOfChat() {
 		await tick();
-		node.scroll({
-			top: node.scrollHeight,
+		messagesScrollDiv.scroll({
+			top: messagesScrollDiv.scrollHeight,
 			behavior: 'smooth'
 		});
 	}
 
 	const messages = derived(chatbot.messageStore, ($messageStore) => $messageStore);
 
-	async function sendMessage(event: KeyboardEvent) {
+	async function sendMessage(event: Event) {
 		if (chatbot.awaitingAssistantResponse || userMessage.trim() === '') return;
 
 		// commit user message
@@ -36,7 +37,7 @@
 
 	onMount(() => {
 		unsubscribe = chatbot.messageStore.subscribe((messages) => {
-			scrollToBottom(scrollDiv);
+			scrollToEndOfChat();
 		});
 	});
 
@@ -47,48 +48,90 @@
 	});
 </script>
 
-<div class="message-box" bind:this={scrollDiv}>
-	{#each $messages as message}
-		<div class="message-wrapper {message.role}">
-			<div class="message {message.role}">
-				{#if message.name}
-					<span class="function-name">RESULT {message.name}</span><br />
-				{:else if message.function_call}
-					<span class="function-name">CALL {message.function_call.name}</span><br />
-				{/if}
-				<!--Sometimes the OpenAI API seems to return message content alongside a function call; so we account for that possibility here-->
-				{#if message.function_call}
-					<b>{message.function_call.arguments}</b><br />
-				{/if}
-				{message.content || ''}
+<div id="component-root">
+	<div class="message-box" bind:this={messagesScrollDiv}>
+		{#each $messages as message}
+			<!--Only show system/function messages if not hidden-->
+			{#if !messagesHidden || !(message.role === 'system' || message.role === 'function' || message.function_call)}
+				<div
+					class="message-wrapper {message.role}"
+					transition:slide={{ duration: 500 }}
+					on:introend={scrollToEndOfChat}
+					on:outroend={scrollToEndOfChat}
+				>
+					<div class="message {message.role}">
+						{#if message.name}
+							<span class="hidden-message">RESULT {message.name}</span><br />
+						{:else if message.function_call}
+							<span class="hidden-message">CALL {message.function_call.name}</span><br />
+						{:else if message.role === 'system'}
+							<span class="hidden-message">SYSTEM</span><br />
+						{/if}
+						<!--Sometimes the OpenAI API seems to return message content alongside a function call; so we account for that possibility here-->
+						{#if message.function_call}
+							<b>{message.function_call.arguments}</b><br />
+						{/if}
+						{message.content || ''}
+					</div>
+				</div>
+			{/if}
+		{/each}
+		{#if chatbot.awaitingAssistantResponse}
+			<div class="typing-indicator-wrapper">
+				<div class="typing-indicator">
+					<span />
+					<span />
+					<span />
+				</div>
 			</div>
-		</div>
-	{/each}
-	{#if chatbot.awaitingAssistantResponse}
-		<div class="typing-indicator-wrapper">
-			<div class="typing-indicator">
-				<span />
-				<span />
-				<span />
-			</div>
-		</div>
-	{/if}
+		{/if}
+	</div>
+	<div class="user-input">
+		<button
+			id="toggle-hidden-messages"
+			title="Toggle hidden messages"
+			on:click={() => {
+				messagesHidden = !messagesHidden;
+				scrollToEndOfChat();
+			}}
+		>
+			<img src={messagesHidden ? '/eye-closed.svg' : '/eye-open.svg'} alt="eye" height="30rem" />
+		</button>
+		<input
+			type="text"
+			class="textbox"
+			placeholder="Type a message..."
+			bind:value={userMessage}
+			on:keydown={(e) => {
+				if (e.key === 'Enter') sendMessage(e);
+			}}
+		/>
+		<button id="send" title="Send message" on:click={sendMessage}>
+			<img
+				src="/send.svg"
+				alt="An icon to indicate that the button sends the message."
+				height="25rem"
+			/>
+		</button>
+	</div>
 </div>
-<input
-	type="text"
-	class="user-input"
-	placeholder="Type a message..."
-	bind:value={userMessage}
-	on:keydown={(e) => {
-		if (e.key === 'Enter') sendMessage(e);
-	}}
-/>
 
 <style>
+	#component-root {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+
+		height: 50vh;
+		padding: 1rem;
+		background-color: var(--primary);
+		margin-bottom: 1rem;
+		border-radius: 5px;
+	}
+
 	.message-box {
 		width: 100%;
 		box-sizing: border-box;
-		max-height: 40vh;
 		overflow-y: auto;
 		border-radius: 5px;
 
@@ -134,23 +177,32 @@
 		overflow-wrap: break-word;
 		word-wrap: break-word; /* Older browsers */
 	}
-	.function-name {
-		font-weight: bold;
+	.hidden-message {
+		display: inline-block;
+		padding: 0.25rem;
+		margin: 0.25rem 0;
 		background-color: black;
-	}
-	.message-wrapper {
-		text-align: left;
-	}
-	.message-wrapper.user {
-		text-align: right;
+		font-weight: bold;
+		border-radius: 5px;
+		border: 1px solid var(--text);
 	}
 
 	.user-input {
+		display: flex;
+		flex-direction: row;
+		gap: 0.5rem;
+
+		margin-top: 0.5rem;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.user-input .textbox {
 		width: 100%;
 		box-sizing: border-box;
 
 		padding: 0.5em;
-		margin-top: 1em;
+		/* margin-top: 1em; */
 		border-radius: 10px 10px 0px 10px;
 		border: 1px solid var(--text);
 		background-color: var(--primary);
@@ -158,11 +210,14 @@
 
 		transition: box-shadow 0.3s ease;
 	}
-	.user-input:focus {
+	.user-input .textbox:hover {
+		box-shadow: 0 0 1px 1px var(--text);
+	}
+	.user-input .textbox:focus {
 		box-shadow: 0 0 1px 1px var(--text);
 		outline: none; /* Remove the default browser outline */
 	}
-	.user-input::placeholder {
+	.user-input .textbox::placeholder {
 		color: var(--text);
 		font-style: italic;
 		opacity: 0.5;
@@ -205,5 +260,28 @@
 		40% {
 			transform: scale(1);
 		}
+	}
+
+	#toggle-hidden-messages {
+		background: none;
+		border: none;
+		padding: 0;
+		margin: 0;
+		cursor: pointer;
+	}
+
+	#toggle-hidden-messages img {
+		vertical-align: middle;
+	}
+	#send {
+		border: none;
+		padding: 0;
+		margin: 0;
+		background: none;
+		cursor: pointer;
+	}
+
+	#send img {
+		vertical-align: middle;
 	}
 </style>

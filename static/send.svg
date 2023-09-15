@@ -1,0 +1,12 @@
+<svg
+    width="100"
+    height="100"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 100 100"
+>
+    <!-- Triangle -->
+    <polygon points="10,10 90,50 10,90" stroke="#effbf9" fill="none" stroke-width="4" stroke-linejoin="round" />
+
+    <!-- Shorter horizontal line inside triangle -->
+    <line x1="10" y1="50" x2="45" y2="50" stroke="#effbf9" stroke-width="4" stroke-linecap="round" />
+</svg>
