@@ -2,14 +2,6 @@ import { get } from "svelte/store";
 import { projectStore, skillsAndExperienceStore } from "./stores";
 
 
-export function getCardsLayout(): string {
-    return JSON.stringify({
-        projects: get(projectStore).map(card => ({ ...card, content: "" })),
-        skillsAndExperience: get(skillsAndExperienceStore).map(card => ({ ...card, content: "" }))
-    });
-}
-
-
 export function getCardContent(cardTitle: string): string {
     const projectCard = get(projectStore).find(card => card.title === cardTitle);
     if (projectCard) return projectCard.content;
@@ -22,9 +14,9 @@ export function getCardContent(cardTitle: string): string {
 
 
 export function focusCard(cardTitle: string): string {
-    // collapse all cards
-    projectStore.update(projects => projects.map(card => ({ ...card, isExpanded: false })));
-    skillsAndExperienceStore.update(cards => cards.map(card => ({ ...card, isExpanded: false })));
+    // collapse and un-highlight all cards
+    projectStore.update(projects => projects.map(card => ({ ...card, isExpanded: false, isHighlighted: false })));
+    skillsAndExperienceStore.update(cards => cards.map(card => ({ ...card, isExpanded: false, isHighlighted: false })));
 
     // move focused card to top
     projectStore.update(projects => {

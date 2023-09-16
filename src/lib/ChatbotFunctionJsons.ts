@@ -1,23 +1,12 @@
-export const getCardsLayoutJson = {
-    "name": "get_cards_layout",
-    "description": "Returns the current layout of the cards on the page. The order of the card matches what the user sees. The content of each card is omitted for conciseness, you can use get_card_content to retrieve the content of a specific card.",
-    "parameters": {
-        "type": "object",
-        "properties": {},
-        "required": [],
-    },
-}
-
-
 export const focusCardJson = {
     "name": "focus_card",
-    "description": "Focuses a card by moving it to the top of the page, expanding it, and highlighting it. This is useful when you want to emphasize a specific card to the user.",
+    "description": "Brings a specific card to prominence by moving it to the top, expanding it, and highlighting it.",
     "parameters": {
         "type": "object",
         "properties": {
             "card_title": {
                 "type": "string",
-                "description": "The title of the card you want to focus.",
+                "description": "Title of the target card.",
             },
         },
         "required": ["card_title"],
@@ -27,13 +16,13 @@ export const focusCardJson = {
 
 export const getCardContentJson = {
     "name": "get_card_content",
-    "description": "Returns the content of the specific card. It is recommended to call focus_card on the card you are talking about. The user can read the contents of the card, so be VERY brief when talking about it, and ask the user if they want to know more.",
+    "description": "Fetches content of a specified card. While discussing a card, briefly summarize and offer more details if the user is interested. Typically focus_card should be called alongside this function.",
     "parameters": {
         "type": "object",
         "properties": {
             "card_title": {
                 "type": "string",
-                "description": "The title of the card whose content you want to retrieve.",
+                "description": "Title of the target card.",
             },
         },
         "required": ["card_title"],
@@ -49,11 +38,11 @@ export const setCardExpandedJson = {
         "properties": {
             "card_title": {
                 "type": "string",
-                "description": "The title of the card you want to expand or collapse.",
+                "description": "Title of the target card.",
             },
             "expanded": {
                 "type": "boolean",
-                "description": "Whether you want to expand or collapse the card.",
+                "description": "True for expansion, false for collapse.",
             },
         },
         "required": ["card_title", "expanded"],
@@ -63,13 +52,13 @@ export const setCardExpandedJson = {
 
 export const highlightCardJson = {
     "name": "highlight_card",
-    "description": "Highlights a specific card by making it pulse another color. You cannot stop the highlight effect, but the user can mouse over the card to stop the pulsing.",
+    "description": "Highlights a card by pulsing its color. User can hover over the card to stop the effect.",
     "parameters": {
         "type": "object",
         "properties": {
             "card_title": {
                 "type": "string",
-                "description": "The title of the card you want to highlight.",
+                "description": "Title of the target card.",
             },
         },
         "required": ["card_title"],
@@ -79,7 +68,7 @@ export const highlightCardJson = {
 
 export const setProjectCardsOrderJson = {
     "name": "set_project_cards_order",
-    "description": "Sets the order of cards in the project section.",
+    "description": "Reorders cards in the project section, top to bottom.",
     "parameters": {
         "type": "object",
         "properties": {
@@ -88,7 +77,7 @@ export const setProjectCardsOrderJson = {
                 "items": {
                     "type": "string"
                 },
-                "description": "An ordered list of project card titles dictating the display order. Titles not in this list will be removed from display."
+                "description": "Ordered list of project card titles for display."
             }
         },
         "required": ["project_order"]
@@ -97,16 +86,19 @@ export const setProjectCardsOrderJson = {
 
 
 export const setSkillsAndExperienceCardsOrderJson = {
-    "name": "highlight_card",
-    "description": "Highlights a specific card by making it pulse another color. You cannot stop the highlight effect, but the user can mouse over the card to stop the pulsing.",
+    "name": "set_skills_experience_cards_order",
+    "description": "Reorders cards in the skills and experience section, top to bottom.",
     "parameters": {
         "type": "object",
         "properties": {
-            "card_title": {
-                "type": "string",
-                "description": "The title of the card you want to highlight.",
-            },
+            "skills_experience_order": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                },
+                "description": "Ordered list of skills and experience card titles for display."
+            }
         },
-        "required": ["card_title"],
+        "required": ["skills_experience_order"]
     },
 }

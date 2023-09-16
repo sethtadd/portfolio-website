@@ -1,40 +1,64 @@
-import { get, writable } from "svelte/store";
+import { get, writable, type Writable } from "svelte/store";
 import * as ChatbotFunctionJsons from "./ChatbotFunctionJsons";
 import * as ChatbotFunctions from "./ChatbotFunctions";
+import { projectStore, skillsAndExperienceStore } from "./stores";
 
 export class Chatbot {
     public awaitingAssistantResponse: boolean = false;
 
-    private initialMessages: { role: string; name?: string; content: string; function_call?: { name: any; arguments: any; } }[] = [
+    public messageStore: Writable<{ role: string; name?: string; content: string; function_call?: { name: any; arguments: any; } }[]> = writable([
         {
             role: "system",
-            content:
-                "You are an AI assistant named SethGPT. You live in the real Seth's portfolio website and help users interested in Seth's projects get to know him. Do not make up information or hypotheticals about Seth, only use information provided through function calls. If you don't have access to info or don't know the answer, say so. Instead of dumping information onto the user, ask the user more details about what they want to know so that you can narrow down the length your responses to be more concise.",
+            content: "You are SethGPT, the AI guide on Seth's portfolio website. Provide information about Seth based on function calls, drawing from the portfolio cards. If you lack specific information or access, notify the user."
         },
         {
             role: "system",
-            content: "Your job is also to rearrange and emphasize parts of the website for users. You can use function calls to accomplish this.",
+            content: "The portfolio layout consists of three columns, each containing cards. Column 1: You, the SethGPT chatbot card. Column 2: Cards detailing Seth's personal projects. Column 3: Cards showcasing Seth's skills and work experience. The next system message will show the current state of the portfolio, updated dynamically with user interactions. Use it to understand the layout and the user's current focus; you are able to see which cards are expanded at any given time."
+        },
+        {
+            role: "system",
+            content: "ERROR: This message is meant to contain the current layout of the cards on the site. If you are seeing this message, then card layout retrieval failed."
         },
         {
             role: "assistant",
-            content: "Hi, I'm Seth",
+            content: "Hello!"
         },
         {
             role: "assistant",
-            content:
-                "Just kidding! It's not actually me, just my placeholder, SethGPT. BUT! I can tell you all about Seth's interests and skills and direct you to projects he's worked on :)",
+            content: "I'm SethGPT, your guide through the cards on Seth's portfolio."
         },
         {
             role: "assistant",
-            content:
-                'Feel free to ask me questions like "show me a random project" or "tell me about his skills"',
-        },
-    ];
+            content: "Feel free to ask about any of Seth's projects, skills, or experience you're curious about!"
+        }
+    ]);
 
-    public messageStore = writable(this.initialMessages);
+    private updateCardLayoutMessage() {
+        // get the current card layout
+        const cardLayout: string = JSON.stringify({
+            projects: get(projectStore).map(card => ({ ...card, content: "" })),
+            skillsAndExperience: get(skillsAndExperienceStore).map(card => ({ ...card, content: "" }))
+        });
+
+        // update the message store with the current card layout
+        this.messageStore.update(messages => {
+            messages[2].content = cardLayout;
+            return messages;
+        });
+    }
+
+    constructor() {
+        // Initial card layout message update
+        this.updateCardLayoutMessage();
+
+        // Card layout message update on projectStore change
+        projectStore.subscribe(() => this.updateCardLayoutMessage());
+
+        // Card layout message update on skillsAndExperienceStore change
+        skillsAndExperienceStore.subscribe(() => this.updateCardLayoutMessage());
+    }
 
     private function_jsons: any[] = [
-        ChatbotFunctionJsons.getCardsLayoutJson,
         ChatbotFunctionJsons.getCardContentJson,
         ChatbotFunctionJsons.focusCardJson,
         ChatbotFunctionJsons.setCardExpandedJson,
@@ -44,18 +68,13 @@ export class Chatbot {
     ]
 
     private functions: { [key: string]: (...args: any[]) => string } = {
-        "get_cards_layout": ChatbotFunctions.getCardsLayout,
         "get_card_content": ChatbotFunctions.getCardContent,
         "focus_card": ChatbotFunctions.focusCard,
         "set_card_expanded": ChatbotFunctions.setCardExpanded,
         "set_project_cards_order": ChatbotFunctions.setProjectCardsOrder,
-        "set_skills_and_experience_cards_order": ChatbotFunctions.setSkillsAndExperienceCardsOrder,
+        "set_skills_experience_cards_order": ChatbotFunctions.setSkillsAndExperienceCardsOrder,
         "highlight_card": ChatbotFunctions.highlightCard,
     };
-
-    constructor(messages?: { role: string; content: string; }[]) {
-        if (messages) this.messageStore.set(messages);
-    }
 
     public async chatCompletionRequest(
         messages: any[],
