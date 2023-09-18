@@ -1,5 +1,5 @@
 <nav>
-	<h1>SETHTADD</h1>
+	<h1>SETHTADD <span style="color:red;">- THIS PORTFOLIO IS IN PROGRESS</span></h1>
 </nav>
 
 <main>
