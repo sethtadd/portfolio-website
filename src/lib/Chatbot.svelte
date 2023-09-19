@@ -127,6 +127,8 @@
 		background-color: var(--primary);
 		margin-bottom: 1rem;
 		border-radius: 5px;
+
+		width: 16vw;
 	}
 
 	.message-box {

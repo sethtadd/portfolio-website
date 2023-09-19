@@ -13,7 +13,7 @@
 </script>
 
 <div
-	class="card {expanded ? 'expanded' : ''} {highlighted ? 'highlighted' : ''}"
+	class="component-root {expanded ? 'expanded' : ''} {highlighted ? 'highlighted' : ''}"
 	on:mouseover={() => (highlighted = false)}
 	on:focus={() => (highlighted = false)}
 	role="button"
@@ -37,7 +37,7 @@
 </div>
 
 <style>
-	.card {
+	.component-root {
 		padding: 1rem 1rem 0.5rem 1rem;
 		background-color: var(--primary);
 		margin-bottom: 1rem;
@@ -47,17 +47,17 @@
 		transition: box-shadow 0.2s ease-in-out;
 		transition: background-color 0.2s ease-in-out;
 
-		width: 15vw; /* Width independent of content */
+		width: 16vw; /* Width independent of content */
 	}
-	.card:hover {
+	.component-root:hover {
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 	}
 
-	.card:hover:not(.expanded) {
+	.component-root:hover:not(.expanded) {
 		background: var(--accent);
 	}
 
-	.card.highlighted {
+	.component-root.highlighted {
 		animation: pulse 1.5s;
 		animation-iteration-count: infinite;
 	}
@@ -78,11 +78,11 @@
 		display: inline-block;
 	}
 
-	.card.expanded button.toggle .content {
+	.component-root.expanded button.toggle .content {
 		transform: rotate(180deg);
 	}
 
-	.card:hover:not(.card.expanded) button.toggle .content {
+	.component-root:hover:not(.component-root.expanded) button.toggle .content {
 		animation: bounce 1s;
 		animation-iteration-count: infinite;
 	}

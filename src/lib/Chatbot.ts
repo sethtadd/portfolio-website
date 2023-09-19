@@ -37,7 +37,7 @@ export class Chatbot {
         // get the current card layout
         const cardLayout: string = JSON.stringify({
             projects: get(projectStore).map(card => ({ ...card, content: "" })),
-            skillsAndExperience: get(skillsAndExperienceStore).map(card => ({ ...card, content: "" }))
+            skillsAndExperience: get(skillsAndExperienceStore).map(card => ({ ...card, content: "<call `get_card_content` to view contents>" }))
         });
 
         // update the message store with the current card layout
