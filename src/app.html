@@ -66,4 +66,13 @@
 	a:hover::before {
 		height: 100%;
 	}
+
+	/* Remove <p> margin introduced by `{@html marked(message.content)}` in `Chatbot.svelte`. This styling must happen here (globally) so that it gets applied after `@html` sugar is applied. */
+	.message p {
+		margin: 0;
+	}
+	.message a {
+		color: var(--text);
+		text-decoration: underline;
+	}
 </style>

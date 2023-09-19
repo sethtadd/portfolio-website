@@ -1,5 +1,5 @@
 <script lang="ts">
-	// import { marked } from "marked";  // TODO implement markdown support on chat messages
+	import { marked } from "marked";
 	import { onDestroy, onMount, tick } from 'svelte';
 	import { derived, type Unsubscriber } from 'svelte/store';
 	import { slide } from 'svelte/transition';
@@ -32,6 +32,10 @@
 		await chatbot.generateResponse();
 		chatbot.awaitingAssistantResponse = false; // TODO move to Chatbot.ts?
 	}
+
+	// GPT-4: Before rendering your text in the bubble, replace each comma with a comma followed by a zero-width space. A zero-width space is an invisible character that allows a line break at its position.
+	// The purpose of this is to prevent chat bubbles from overflowing their container when the content contains no spaces to break on.
+	const preprocessText = (text: string) => text.replace(/,/g, ',\u200B');
 
 	let unsubscribe: Unsubscriber;
 
@@ -71,7 +75,7 @@
 						{#if message.function_call}
 							<b>{message.function_call.arguments}</b><br />
 						{/if}
-						{message.content || ''}
+						{@html marked(preprocessText(message.content)) || ''}
 					</div>
 				</div>
 			{/if}
