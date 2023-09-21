@@ -57,15 +57,17 @@ export const projectStore = writable(
             summary: 'A shader script for Unity3D that "accurately" simulates light propagation with ray marching; chromatic dispersion, Fresnel equations, etc.',
             content: `This shader is an improvement on my previous ray marching program. It's written for Unity but can easily be used in other contexts; it's just a GPU shader. I wrote this shader to explore a few light-transport concepts including chromatic dispersion, light reflection/refraction and the Fresnel equations, etc. As it's just a shader, I have thrown the code into a <a href="https://gist.github.com/sethtadd/f240458b76309ffd7a53d17558487fa1">GitHub Gist for your viewing pleasure :).</a>
             <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%;margin-top:1rem;">
-                <video controls autoplay loop style="max-width: 100%;height: auto;">
+                <video controls autoplay loop muted style="max-width: 100%;height: auto;">
                     <source src="ray-marcher.webm" type="video/webm">
+                    <source src="ray-marcher.mp4" type="video/mp4">
                     Your browser does not support the video tag or the file format of this video.
                 </video>
                 <p style="text-align:center;margin-top:0.5rem;">Reflections and refractions</p>
             </div>
             <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%;margin-top:1rem;">
-                <video controls autoplay loop style="max-width: 100%;height: auto;">
+                <video controls autoplay loop muted style="max-width: 100%;height: auto;">
                     <source src="ray-marcher-chromatic.webm" type="video/webm">
+                    <source src="ray-marcher-chromatic.mp4" type="video/mp4">
                     Your browser does not support the video tag or the file format of this video.
                 </video>
                 <p style="text-align:center;margin-top:0.5rem;">Chromatic distortion</p>
