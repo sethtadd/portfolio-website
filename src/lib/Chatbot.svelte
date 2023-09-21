@@ -75,7 +75,7 @@
 						{#if message.function_call}
 							<b>{message.function_call.arguments}</b><br />
 						{/if}
-						{@html marked(preprocessText(message.content)) || ''}
+						{@html message.content ? marked(preprocessText(message.content)) : ''}
 					</div>
 				</div>
 			{/if}

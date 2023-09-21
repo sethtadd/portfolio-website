@@ -4,6 +4,7 @@
 	export let expanded = false;
 	export let highlighted = false;
 	export let title: string;
+	export let date: string;
 	export let summary: string;
 	export let content: string;
 
@@ -20,7 +21,10 @@
 	tabindex="0"
 	aria-roledescription="Mousing over or focusing this card will stop the highlight animation."
 >
-	<h2>{title}</h2>
+	<h2 class="title">{title}</h2>
+	{#if date}
+		<em class="date">{date}</em>
+	{/if}
 	{#if expanded}
 		<p transition:slide>{@html content}</p>
 	{:else}
@@ -83,8 +87,20 @@
 		animation-iteration-count: infinite;
 	}
 
-	h2 {
+	.title {
 		margin: 0;
+	}
+
+	.date {
+		display: inline-block;
+		margin-top: 0.5rem;
+
+		color: var(--accent);
+		transition: color 0.2s ease-in-out;
+	}
+
+	.component-root:hover:not(.component-root.expanded) .date {
+		color: var(--text);
 	}
 
 	@keyframes bounce {

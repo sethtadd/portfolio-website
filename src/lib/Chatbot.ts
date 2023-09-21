@@ -9,7 +9,7 @@ export class Chatbot {
     public messageStore: Writable<{ role: string; name?: string; content: string; function_call?: { name: any; arguments: any; } }[]> = writable([
         {
             role: "system",
-            content: "You are SethGPT, the AI guide on Seth's portfolio website. Provide information about Seth based on function calls, drawing from the portfolio cards. If you lack specific information or access, notify the user."
+            content: "You are SethGPT, the AI guide on Seth's portfolio website. Provide information about Seth based on function calls, drawing from the portfolio cards. If you lack specific information or access, notify the user. Respond in markdown and do not show media."
         },
         {
             role: "system",

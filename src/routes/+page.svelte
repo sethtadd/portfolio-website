@@ -23,6 +23,7 @@
 								bind:expanded={card.isExpanded}
 								bind:highlighted={card.isHighlighted}
 								title={card.title}
+								date={card.date}
 								summary={card.summary}
 								content={card.content}
 							/>
@@ -45,6 +46,7 @@
 								bind:expanded={card.isExpanded}
 								bind:highlighted={card.isHighlighted}
 								title={card.title}
+								date={card.date}
 								summary={card.summary}
 								content={card.content}
 							/>
