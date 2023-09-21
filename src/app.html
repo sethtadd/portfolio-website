@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8" />
 	<link rel="icon" href="%sveltekit.assets%/favicon.png" />
-	<meta name="viewport" content="width=device-width" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	%sveltekit.head%
 </head>
 
@@ -15,6 +15,11 @@
 </html>
 
 <style>
+	/* Base font size for rem units */
+	html {
+		font-size: 16px;
+	}
+
 	:root {
 		--text: #effbf9;
 		--background: #030c0b;
@@ -51,13 +56,14 @@
 		vertical-align: middle;
 	}
 
+	/* Underline effect */
 	a::before {
 		content: "";
 		position: absolute;
 		bottom: 0;
 		left: 0;
 		right: 0;
-		height: 2px; /* Initial underline thickness */
+		height: 2px;
 		background-color: var(--accent);
 		transition: height 0.3s;
 		z-index: -1;
@@ -71,6 +77,7 @@
 	.message p {
 		margin: 0;
 	}
+
 	.message a {
 		color: var(--text);
 		text-decoration: underline;

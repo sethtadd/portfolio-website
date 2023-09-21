@@ -103,6 +103,7 @@
 		</button>
 		<input
 			type="text"
+			name="chat-input"
 			class="textbox"
 			placeholder="Type a message..."
 			bind:value={userMessage}
@@ -126,7 +127,7 @@
 		flex-direction: column;
 		justify-content: space-between;
 
-		height: 50vh;
+		height: 30rem;
 		padding: 1rem;
 		background-color: var(--primary);
 		margin-bottom: 1rem;
@@ -209,6 +210,7 @@
 	}
 
 	.user-input .textbox {
+		font-size: 1rem;
 		width: 100%;
 		box-sizing: border-box;
 
