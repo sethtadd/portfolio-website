@@ -40,14 +40,10 @@
 	.component-root {
 		padding: 1rem 1rem 0.5rem 1rem;
 		background-color: var(--primary);
-		margin-bottom: 1rem;
-
-		border-radius: 5px;
 
 		transition: box-shadow 0.2s ease-in-out;
 		transition: background-color 0.2s ease-in-out;
-
-		width: 16vw; /* Width independent of content */
+		border-radius: 5px;
 	}
 	.component-root:hover {
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
@@ -63,15 +59,15 @@
 	}
 
 	button.toggle {
-		background: none;
-		color: var(--secondary);
-		border: none;
 		padding: 0.25rem 1rem;
 		margin: 0;
-		font-size: 1.5em;
 
+		background: none;
+		color: var(--secondary);
+		font-size: 1.5em;
 		cursor: pointer;
 		transition: transform 0.3s ease-in-out;
+		border: none;
 	}
 
 	button.toggle .content {

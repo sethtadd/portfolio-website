@@ -131,8 +131,6 @@
 		background-color: var(--primary);
 		margin-bottom: 1rem;
 		border-radius: 5px;
-
-		width: 16vw;
 	}
 
 	.message-box {
@@ -173,8 +171,6 @@
 		margin: 0.25em 0.5em;
 		border-radius: 10px;
 		border: 1px solid var(--text);
-
-		max-width: 13vw; /* prevent messages from getting too wide */
 	}
 	.message.user {
 		background-color: var(--chat-user);
