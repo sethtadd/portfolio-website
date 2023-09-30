@@ -1,8 +1,15 @@
 <script lang="ts">
 	import Chatbot from '$lib/Chatbot.svelte';
 	import ExpandableCard from '$lib/ExpandableCard.svelte';
-	import { projectStore, skillsAndExperienceStore } from '$lib/stores';
+	import { projectStore, sessionId, skillsAndExperienceStore } from '$lib/stores';
+	import { onMount } from 'svelte';
 	import { flip } from 'svelte/animate';
+	import { v4 as uuidv4 } from 'uuid';
+
+	onMount(() => {
+		const id = uuidv4();
+		sessionId.set(id);
+	});
 </script>
 
 <div id="component-root">

@@ -1,7 +1,7 @@
 import { get, writable, type Writable } from "svelte/store";
 import * as ChatbotFunctionJsons from "./ChatbotFunctionJsons";
 import * as ChatbotFunctions from "./ChatbotFunctions";
-import { projectStore, skillsAndExperienceStore } from "./stores";
+import { projectStore, sessionId, skillsAndExperienceStore } from "./stores";
 
 export class Chatbot {
     public awaitingAssistantResponse: boolean = false;
@@ -89,6 +89,7 @@ export class Chatbot {
         let json_data: any = {
             model: model,
             messages: messages,
+            sessionId: get(sessionId),
         };
 
         if (functions) {
